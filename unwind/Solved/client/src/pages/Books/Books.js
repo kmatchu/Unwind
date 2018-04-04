@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import DeleteBtn from "../../components/DeleteBtn";
+import Button from "../../components/Button";
 import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
 import { Link } from "react-router-dom";
@@ -10,10 +11,10 @@ import { Input, TextArea, FormBtn } from "../../components/Form";
 
 class Books extends Component {
   state = {
-    books: [],
-    title: "",
-    author: "",
-    synopsis: "",
+    currentUser: [],
+    userName: "",
+    email: "",
+    password: "",
     difficulty: 0,
     equation: "",
     step2: "",
@@ -27,6 +28,33 @@ class Books extends Component {
     hint3: "",
     hint4: ""
   };
+
+  handleLoginChange = () =>{
+
+  }
+
+  makeAccount = event =>{
+    event.preventDefault();
+    if(!this.state.userName){
+      alert("You must enter a username.");
+    }
+    else if (!this.state.email){
+      alert("You must enter an email");
+    }
+    else if(!this.state.password){
+      alert("You must enter a password")
+    }
+    else{
+    API.saveBook({
+        userName: this.state.userName,
+        email: this.state.email,
+        password: this.state.password
+      })
+        .catch(err => console.log(err));
+    }
+      
+
+  }
 
   componentDidMount() {
     // this.loadBooks();
@@ -55,7 +83,6 @@ class Books extends Component {
   // };
 
   algebra = () =>{
-    // event.preventDefault();
     var num1 = Math.floor(Math.random()*12 + 2);
     var num2 = Math.floor(Math.random()*12 + 2);
     var num3 = Math.floor(Math.random()*12 + 2);
@@ -121,32 +148,33 @@ class Books extends Component {
     break;
 
     case 2:
+    //Minus sign breaks RegExp check
       this.setState({ hint2: "Add or subtract any terms with their like terms, on the same side." });  
       this.setState({ hint3: "Move all X terms to one side, and all other numbers to the other side." });
       this.setState({ hint4: "Divide both sides so that X is alone on one side." });
             switch(Math.floor(Math.random()*4)){
             case 0:
-            this.setState({ equation: `${num1}X +${num2-num1}X - ${num4} + ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2)}` });
-            this.setState({ step2Ans: `${num2}X\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1)}` });
+            this.setState({ equation: `${num1}X +${num2-num1}X + ${num4} + ${num3} = ${num2+num1}X - ${num2}X + ${num3*(num2 - num1) + num4 + num3}` });
+            this.setState({ step2Ans: `${num2}X\\s*+\\s*${num4 + num3}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1)+ num4 + num3}` });
             this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
             this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
             break;
             case 1:
-            this.setState({ equation: `${num1}X +${num2-num1}X - ${num4} - ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2) - 2*num4}` });
-            this.setState({ step2Ans: `${num2}X\\s*-\\s*${2*num4}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1) - 2*num4}` });
+            this.setState({ equation: `${num1}X +${num2-num1}X - ${num4} - ${num3} = ${num2+num1}X - ${num2}X + ${num3*(num2 - num1) - num4 - num3}` });
+            this.setState({ step2Ans: `${num2}X\\s*\-\\s*${num4 + num3}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1) - num4 - num3}` });
             this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
             this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
             break;
             case 2:
-            this.setState({ equation: `${num1}X +${num2-num1}X + ${num4} + ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2) + 2*num4 + num1} - ${num1}` });
-            this.setState({ step2Ans: `${num2}X\\s*+\\s*${2*num4}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1)+2*num4}` });
+            this.setState({ equation: `${num1}X +${num1} + ${num2-num1}X = ${num2+num1}X - ${num2}X + ${num3*(num2 - num1) + num4 + num1} - ${num4}` });
+            this.setState({ step2Ans: `${num2}X\\s*+\\s*${num1}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1)+num1}` });
             this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
             this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
             break;
             case 3:
-            this.setState({ equation: `${num1}X -${num1-num2}X - ${num4} - ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2) - 2*num4 - num3} + ${num3}` });
-            this.setState({ step2Ans: `${num2}X\\s*-\\s*${2*num4}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1) - 2*num4}` });
-            this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
+            this.setState({ equation: `${num1}X -${num1-num2}X - ${num4} - ${num3} = -${num2+num1}X + ${num2}X + ${num3*(num2 + num1) - num4*num3 - num4 - num3} + ${num3*num4}` });
+            this.setState({ step2Ans: `${num2}X\\s*\-\\s*${num4+num3}\\s*=\\s*${0 - num1}X\\s*+\\s*${num3*(num2 + num1) - num4 - num3}` });
+            this.setState({ step3Ans: `${num2+num1}X\\s*=\\s*${num3*(num2 + num1)}|${0 - num3*(num2 + num1)}\\s*=\\s*${num1 + num2}X` });
             this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
             break;
             default:
@@ -176,7 +204,21 @@ else{
 }
 
 }
- 
+//makes equation before changing difficulty
+toEasy = event =>{
+  event.preventDefault();
+  this.setState({ difficulty: 0 },this.makeEquation);
+}
+
+toMed = event =>{
+  event.preventDefault();
+  this.setState({ difficulty: 1 },this.makeEquation);
+}
+
+toHard = event =>{
+  event.preventDefault();
+  this.setState({ difficulty: 2 },this.makeEquation);
+}
 
   // deleteBook = id => {
   //   API.deleteBook(id)
@@ -193,17 +235,10 @@ else{
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if((this.state.step2).match(new RegExp(this.state.step2Ans, 'i')) && (this.state.step3).match(new RegExp(this.state.step3Ans, 'i'))) {
-      // API.saveBook({
-      //   title: this.state.title,
-      //   author: this.state.author,
-      //   synopsis: this.state.synopsis
-      // })
-           // .then(res => this.loadBooks())
-        // .catch(err => console.log(err));
+    if((this.state.step2).match(new RegExp(this.state.step2Ans, 'i')) && (this.state.step3).match(new RegExp(this.state.step3Ans, 'i'))&& (this.state.step4).match(new RegExp(this.state.step4Ans, 'i'))) {
+
       alert("Correct!");
-      this.setState({ step2: "", step3: "", step4: "" });
-      this.shuffleCoefficients();
+      this.makeEquation();
    
     }
     else{
@@ -215,7 +250,47 @@ else{
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-3 sm-12">
+            <Jumbotron>
+              <h1>Create Account</h1>
+            </Jumbotron>
+            <form>
+              <Input
+                value={this.state.userName}
+                onChange={this.handleInputChange}
+                name="userName"
+                placeholder="User Name"
+              />
+              <Input
+                value={this.state.email}
+                onChange={this.handleInputChange}
+                name="email"
+                placeholder="Email Address"
+              />
+              <Input
+                value={this.state.password}
+                onChange={this.handleInputChange}
+                name="password"
+                placeholder="Password"
+              />
+              <FormBtn
+                // disabled={!(this.state.author && this.state.title)}
+                onClick={this.makeAccount}
+              >
+                Submit
+              </FormBtn>
+              </form>
+            {/* <Button onClick={this.toEasy}>
+            Easy
+            </Button>
+            <Button onClick={this.toMed}>
+            Medium
+            </Button>
+            <Button onClick={this.toHard}>
+            Hard
+            </Button> */}
+          </Col>
+          <Col size="md-9">
             <Jumbotron>
               <h1>{this.state.equation}</h1>
             </Jumbotron>
@@ -252,11 +327,8 @@ else{
                 {/* <button type="button" className="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> */}
             </form>
           </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron>
-            {this.state.books.length ? (
+          
+            {/* {this.state.books.length ? (
               <List>
                 {this.state.books.map(book => (
                   <ListItem key={book._id}>
@@ -271,8 +343,8 @@ else{
               </List>
             ) : (
               <h3>No Results to Display</h3>
-            )}
-          </Col>
+            )} */}
+          
         </Row>
         
         {/* <div id="myModal" className="modal fade" role="dialog">
