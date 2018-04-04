@@ -7,31 +7,182 @@ import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, TextArea, FormBtn } from "../../components/Form";
 
+
 class Books extends Component {
   state = {
     books: [],
     title: "",
     author: "",
-    synopsis: ""
+    synopsis: "",
+    difficulty: 0,
+    equation: "",
+    step2: "",
+    step3: "",
+    step4: "",
+    step2Ans: "",
+    step3Ans: "",
+    step4Ans: "",
+    category: "algebra",
+    hint2: "",
+    hint3: "",
+    hint4: ""
   };
 
   componentDidMount() {
-    this.loadBooks();
+    // this.loadBooks();
+    this.makeEquation();
   }
 
-  loadBooks = () => {
-    API.getBooks()
-      .then(res =>
-        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-      )
-      .catch(err => console.log(err));
-  };
+  makeEquation = () =>{
+    switch(this.state.category){
+      case 'algebra':
+        this.algebra();
+      break;
+      case 'quadratic':
+        this.quadratic();
+      break;
+      default:
+      alert("No subject selected");
+    }
+  }
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
-      .catch(err => console.log(err));
-  };
+  // loadBooks = () => {
+  //   API.getBooks()
+  //     .then(res =>
+  //       this.setState({ books: res.data, title: "", author: "", synopsis: "" })
+  //     )
+  //     .catch(err => console.log(err));
+  // };
+
+  algebra = () =>{
+    // event.preventDefault();
+    var num1 = Math.floor(Math.random()*12 + 2);
+    var num2 = Math.floor(Math.random()*12 + 2);
+    var num3 = Math.floor(Math.random()*12 + 2);
+    var num4 = Math.floor(Math.random()*12 + 2)
+
+    switch(this.state.difficulty){
+    case 0:
+        this.setState({ hint2: "Move all X terms to one side, and all other numbers to the other side." });
+        this.setState({ hint3: "Divide both sides so that X is alone on one side." });
+        switch(Math.floor(Math.random()*4)){
+            case 0:
+            this.setState({ equation: `${num1}x + ${num2*num1} = 0` });
+            this.setState({ step2Ans: `${num1}X\\s*=\\s*${0 - num2*num1}|${num2*num1}\\s*=\\s*${0 - num1}X` });
+            this.setState({ step3Ans: `X\\s*=\\s*${0 - num2}|${0 - num2}\\s*=\\s*X` });
+            break;
+            case 1:
+            this.setState({ equation: `${0 - num1}x + ${num2*num1} = 0` });
+            this.setState({ step2Ans: `${num2*num1}\\s*=\\s*${num1}X|${0 - num1}X\\s*=\\s*${0 - num2*num1}` });
+            this.setState({ step3Ans: `X\\s*=\\s*${num2}|${num2}\\s*=\\s*X` });
+            break;
+            case 2:
+            this.setState({ equation: `${num1}x - ${num2*num1} = 0` });
+            this.setState({ step2Ans: `${num1}X\\s*=\\s*${num2*num1}|${0 - num2*num1}\\s*=\\s*${0 - num1}X` });
+            this.setState({ step3Ans: `X\\s*=\\s*${num2}|${num2}\\s*=\\s*X` });
+            break;
+            case 3:
+            this.setState({ equation: `${0 - num1}x - ${num2*num1} = 0` });
+            this.setState({ step2Ans: `${0 - num1}X\\s*=\\s*${num2*num1}|${0 - num2*num1}\\s*=\\s*${num1}X` });
+            this.setState({ step3Ans: `X\\s*=\\s*${0 - num2}|${0 - num2}\\s*=\\s*X` });
+            break;
+            default:
+            alert("Error, please refresh.");   }
+    break;
+
+    case 1:
+        this.setState({ hint2: "Move all X terms to one side, and all other numbers to the other side." });
+        this.setState({ hint3: "Divide both sides so that X is alone on one side." });
+        switch(Math.floor(Math.random()*4)){
+            case 0:
+            this.setState({ equation: `${num1}X - ${num4}=${0 - num2}X + ${num3*(num1 + num2) - num4}` });
+            this.setState({ step2Ans: `${num1 + num2}X\\s*=\\s*${num3*(num1 + num2)}|${0 - num3*(num1 + num2)}\\s*=\\s*${0 - num2 - num1}X` });
+            this.setState({ step3Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            case 1:
+            this.setState({ equation: `${0 - num1}X - ${num4}=${0 - num2}X + ${num3*(num2 - num1) - num4}` });
+            this.setState({ step2Ans: `${num2 - num1}X\\s*=\\s*${num3*(num2 - num1)}|${num3*(num1 + num2)}\\s*=\\s*${num1 - num2}X` });
+            this.setState({ step3Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            case 2:
+            this.setState({ equation: `${0 - num1}X + ${num4}=${num2}X + ${num3*(num2 - num1) + num4}` });
+            this.setState({ step2Ans: `${num2 + num1}X\\s*=\\s*${num3*(num2 + num1)}|${num3*(num1 + num2)}\\s*=\\s*${num1 + num2}X` });
+            this.setState({ step3Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            case 3:
+            this.setState({ equation: `${num1}X + ${num4}=${num2}X + ${num3*(num1 - num2) + num4}` });
+            this.setState({ step2Ans: `${num1 - num2}X\\s*=\\s*${num3*(num1 - num2)}|${num3*(num2 - num1)}\\s*=\\s*${num2 - num1}X` });
+            this.setState({ step3Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            default:
+            alert("Error, please refresh."); 
+            }
+    
+    break;
+
+    case 2:
+      this.setState({ hint2: "Add or subtract any terms with their like terms, on the same side." });  
+      this.setState({ hint3: "Move all X terms to one side, and all other numbers to the other side." });
+      this.setState({ hint4: "Divide both sides so that X is alone on one side." });
+            switch(Math.floor(Math.random()*4)){
+            case 0:
+            this.setState({ equation: `${num1}X +${num2-num1}X - ${num4} + ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2)}` });
+            this.setState({ step2Ans: `${num2}X\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1)}` });
+            this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
+            this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            case 1:
+            this.setState({ equation: `${num1}X +${num2-num1}X - ${num4} - ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2) - 2*num4}` });
+            this.setState({ step2Ans: `${num2}X\\s*-\\s*${2*num4}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1) - 2*num4}` });
+            this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
+            this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            case 2:
+            this.setState({ equation: `${num1}X +${num2-num1}X + ${num4} + ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2) + 2*num4 + num1} - ${num1}` });
+            this.setState({ step2Ans: `${num2}X\\s*+\\s*${2*num4}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1)+2*num4}` });
+            this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
+            this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            case 3:
+            this.setState({ equation: `${num1}X -${num1-num2}X - ${num4} - ${num4} = ${num2+num1}X - ${num2}X + ${num3*(num1 - num2) - 2*num4 - num3} + ${num3}` });
+            this.setState({ step2Ans: `${num2}X\\s*-\\s*${2*num4}\\s*=\\s*${num1}X\\s*+\\s*${num3*(num2 - num1) - 2*num4}` });
+            this.setState({ step3Ans: `${num2-num1}X\\s*=\\s*${num3*(num2 - num1)}|${0 - num3*(num2 - num1)}\\s*=\\s*${num1 - num2}X` });
+            this.setState({ step4Ans: `X\\s*=\\s*${num3}|${num3}\\s*=\\s*X` });
+            break;
+            default:
+            alert("Error, please refresh."); 
+            }
+    break;
+
+    // case 3:
+    // // equation = `${num1}X + ${num4}=${0 - num2}X + ${num3*(num1 + num2) + num4}`;
+    // //floats instead of integers
+    // console.log("expert difficulty not ready yet");
+    // break;
+    default:
+    alert("Error, please refresh. Make sure you selected a difficulty."); 
+    }
+};
+
+displayHint = event =>{
+event.preventDefault();
+if(this.state.hint4 === ""){
+alert(`1. ${this.state.hint2}
+ 2. ${this.state.hint3}`);  }
+else{
+  alert(`1. ${this.state.hint2}
+  2. ${this.state.hint3}
+  3. ${this.state.hint4}`);
+}
+
+}
+ 
+
+  // deleteBook = id => {
+  //   API.deleteBook(id)
+  //     .then(res => this.loadBooks())
+  //     .catch(err => console.log(err));
+  // };
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -42,15 +193,22 @@ class Books extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
+    if((this.state.step2).match(new RegExp(this.state.step2Ans, 'i')) && (this.state.step3).match(new RegExp(this.state.step3Ans, 'i'))) {
+      // API.saveBook({
+      //   title: this.state.title,
+      //   author: this.state.author,
+      //   synopsis: this.state.synopsis
+      // })
+           // .then(res => this.loadBooks())
+        // .catch(err => console.log(err));
+      alert("Correct!");
+      this.setState({ step2: "", step3: "", step4: "" });
+      this.shuffleCoefficients();
+   
     }
+    else{
+      console.log("Incorrect.");
+    };
   };
 
   render() {
@@ -59,33 +217,39 @@ class Books extends Component {
         <Row>
           <Col size="md-6">
             <Jumbotron>
-              <h1>What Books Should I Read?</h1>
+              <h1>{this.state.equation}</h1>
             </Jumbotron>
             <form>
               <Input
-                value={this.state.title}
+                value={this.state.step2}
                 onChange={this.handleInputChange}
-                name="title"
-                placeholder="Title (required)"
+                name="step2"
+                placeholder="Step 2"
               />
               <Input
-                value={this.state.author}
+                value={this.state.step3}
                 onChange={this.handleInputChange}
-                name="author"
-                placeholder="Author (required)"
+                name="step3"
+                placeholder="Step 3"
               />
-              <TextArea
-                value={this.state.synopsis}
+              <Input
+                value={this.state.step4}
                 onChange={this.handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
+                name="step4"
+                placeholder="Step 4"
               />
               <FormBtn
-                disabled={!(this.state.author && this.state.title)}
+                // disabled={!(this.state.author && this.state.title)}
                 onClick={this.handleFormSubmit}
               >
-                Submit Book
+                Submit
               </FormBtn>
+                <FormBtn
+                onClick={this.displayHint}
+                >
+                Show the hints
+                </FormBtn>
+                {/* <button type="button" className="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> */}
             </form>
           </Col>
           <Col size="md-6 sm-12">
@@ -110,6 +274,24 @@ class Books extends Component {
             )}
           </Col>
         </Row>
+        
+        {/* <div id="myModal" className="modal fade" role="dialog">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                <h4 className="modal-title">Modal Header</h4>
+              </div>
+              <div className="modal-body">
+                <p>Some text in the modal.</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+
+          </div>
+        </div> */}
       </Container>
     );
   }
