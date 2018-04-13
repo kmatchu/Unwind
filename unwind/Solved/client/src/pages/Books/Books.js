@@ -23,9 +23,11 @@ class Books extends Component {
     step2: "",
     step3: "",
     step4: "",
+    step5: "",
     step2Ans: "",
     step3Ans: "",
     step4Ans: "",
+    step5Ans: "",
     category: "algebra",
     hint2: "",
     hint3: "",
@@ -35,8 +37,9 @@ class Books extends Component {
 
   makeAccount = event =>{
     event.preventDefault();
-    if(!(API.getBook(this.state._id)
-    .then(res => res.data.userName)) ){
+    // if(!(API.getBook(this.state._id)
+    // .then(res => res.data.userName)) ){
+
       if(!this.state.userName){
         alert("You must enter a username.");
       }
@@ -56,7 +59,7 @@ class Books extends Component {
         .then(res => console.log(res))
         .catch(err => console.log(err));
   };      
-  }
+  // }
   }
 
   loginUser = event =>{
@@ -78,6 +81,9 @@ class Books extends Component {
       break;
       case 'quadratic':
         this.quadratic();
+      break;
+      case "conic":
+        this.conicSections();
       break;
       default:
       alert("No subject selected");
@@ -209,63 +215,90 @@ class Books extends Component {
   quadratic = () => {
     var num1 = Math.floor(Math.random()*3 + 2);
     var num2 = Math.floor(Math.random()*3 + 2);
-    // var num3 = Math.floor(Math.random()*12 + 2);
+    var num3 = Math.floor(Math.random()*2 + 2);
     // var num4 = Math.floor(Math.random()*12 + 2)
+    switch(this.state.difficulty){
+      case 0:
     this.setState({ hint2: "Try a few guesses. The equation can be reduced to a small expression squared, and drop the squared. Also, us '^' for exponent. " });
     this.setState({ hint3: "Something squared is only equal to zero if the thing itself is zero. Drop the squared, and move the non-x components to the other side." });
     this.setState({ hint4: "Divide to solve for X"})
-    this.setState({ equation: `${Math.pow(num1,2)}X^2 + ${2*num1*num2*num1}X + ${Math.pow((num2*num1),2)} = 0` })
-    this.setState({ step2Ans: `(${num1}X\\s*+\\s*${num2*num1})\\s*=\\s*0` })
-    this.setState({ step3Ans: `${num1}X\\s*=\\s*${0 - num2*num1}|${num2*num1}\\s*=\\s*${0 - num1}X` })
-    this.setState({ step4Ans: `X\\s*=\\s*${0-num2}|${0-num2}\\s*=\\s*X` })
-  // switch(difficulty){
-  //     case 0:
-  //     this.setState({ hint2: "Move all X terms to one side, and all other numbers to the other side." });
-  //     this.setState({ hint3: "Divide both sides so that X is alone on one side." });
-  //     this.setState({ hint4: "The last area should be left blank "})
-  //         switch(randoNum){
-  //             case 0:
-  //                 equation = `${Math.pow(num1,2)}X^2 + ${2*num1*num2*num1}X + ${Math.pow((num2*num1),2)}\\s*=\\s*0`;
-  //                 step1 = `(${num1}X\\s*+\\s*${num2*num1})\\s*^\\s*2)\\s*=\\s*0`
-  //                 step2 = `${num1}X\\s*=\\s*${0 - num2*num1}|${num2*num1}\\s*=\\s*${0 - num1}X`
-  //                 step3 = `X\\s*=\\s*${0-num2}|${0-num2}\\s*=\\s*X`
-  //             break;
-  //             case 1:
-  //                 equation = `${Math.pow(num1,2)}X^2 - ${2*num1*num2*num1}X + ${Math.pow((num2*num1),2)}\\s*=\\s*0`;
-  //                 step1 = `(${num1}X\\s*-\\s*${num2*num1})\\s*^\\s*2)\\s*=\\s*0`
-  //                 step2 = `${num1}X\\s*=\\s*${num2*num1}|${0 - num2*num1}\\s*=\\s*${0 - num1}X`
-  //                 step3 = `X\\s*=\\s*${num2}|${num2}\\s*=\\s*X`
-  //             break;  
-  //             case 2:
-  //                 console.log("not ready yet");
-  //             break;
-  //             case 3:
-  //                 console.log("not ready yet");
-  //             break;
-  //             default:
-  //             alert("Error, please refresh."); 
-  //             }
-  //     break;
-      
-  //     case 1:
-  //     //complete the square
-  //         console.log("not ready yet");
-  //     break;
+    this.setState({ equation: `${Math.pow(num1,2)}X^2 - ${2*num1*num2*num1}X + ${Math.pow((num2*num1),2)} = 0` })
+    this.setState({ step2Ans: `[(]${num1}X\\s*[-]\\s*${num2*num1}[)]\\s*=\\s*0` })
+    this.setState({ step3Ans: `${num1}X\\s*=\\s*${num2*num1}|${0 - num2*num1}\\s*=\\s*${0 - num1}X` })
+    this.setState({ step4Ans: `X\\s*=\\s*${num2}|${num2}\\s*=\\s*X` })
+      break;
 
-  //     case 2:
-  //     //quadratic equation
-  //         switch(num1>num2){
-  //             case true:
-  //             equation = `${num1}X^2 + ${Math.floor(Math.random()*7 + 2*num1)}X +${num2}`;
-  //             break;
-  //             default:
-  //             equation = `${num1}X^2 + ${Math.floor(Math.random()*7 + 2*num2)}X +${num2}`;    }
-  //     break;
+      case 1:
+      this.setState({ hint2: "Try a few guesses. The equation can be reduced to a small expression squared, and drop the squared. Also, us '^' for exponent. " });
+      this.setState({ hint3: "Something squared is only equal to zero if the thing itself is zero. Drop the squared, and move the non-x components to the other side." });
+      this.setState({ hint4: "Divide to solve for X"})
+      this.setState({ equation: `${Math.pow(num1,2)}X^2 - ${2*num1*num2*num1}X + ${num3} = 0` })
+      this.setState({ step2Ans: `${Math.pow(num1,2)}X[^]2\\s*[-]\\s*${2*num1*num2*num1}X\\s*+\\s*${Math.pow((num2*num1),2)}\\s*=\\s*${(Math.pow((num2*num1),2)) - num3}` })
+      this.setState({ step3Ans: `[(]${num1}X\\s*[-]\\s*${num2*num1}[)][^]2\\s*=\\s*${(Math.pow((num2*num1),2)) - num3}` })
+      this.setState({ step4Ans: `${num1}X\\s*[-]\\s*${num2*num1}\\s*=\\s*${Math.pow((Math.pow((num2*num1),2) - num3),0.5).toFixed(1)}` })
+      this.setState({ step5Ans: `X\\s*=\\s*${((Math.pow((Math.pow((num2*num1),2) - num3),0.5) + num2*num1).toFixed(1)/num1).toFixed(1)}` })
 
-  //     default:
-  //         alert("Error, please refresh. Make sure you selected a difficulty."); 
-  //     }
-}
+      break;
+
+      case 2:
+      switch(num1>num2){
+                    case true:
+                    this.setState({ equation: `${num1}X^2 + ${4*num1*num1}X +${num2} = 0` });
+                    this.setState({ step2Ans: `X\\s*=\\s*[(]${0 - 4*num1*num1}\\s*[+][-]\\s*sqrt[(]${Math.pow(4*num1*num1,2) - 4*num1*num2}[)][)][/]${2*num1}` });
+                    this.setState({ step3Ans: `X\\s*=\\s*${(((0 - 4*num1*num1) + Math.pow(Math.pow(4*num1*num1,2) - 4*num1*num2,0.5).toFixed(1))/2*num1).toFixed(1)}` })
+                    this.setState({ step4Ans: `X\\s*=\\s*${(((0 - 4*num1*num1) - Math.pow(Math.pow(4*num1*num1,2) - 4*num1*num2,0.5).toFixed(1))/2*num1).toFixed(1)}` })
+                    break;
+                    case false:
+                    this.setState({ equation: `${num1}X^2 + ${4*num2*num2}X +${num2} = 0` });
+                    this.setState({ step2Ans: `X\\s*=\\s*[(]${0 - 4*num2*num2}\\s*[+][-]\\s*sqrt[(]${Math.pow(4*num2*num2,2) - 4*num1*num2}[)][)][/]${2*num1}` });
+                    this.setState({ step3Ans: `X\\s*=\\s*${(((0 - 4*num2*num2) + Math.pow(Math.pow(4*num2*num2,2) - 4*num1*num2,0.5).toFixed(1))/2*num1).toFixed(1)}` })
+                    this.setState({ step4Ans: `X\\s*=\\s*${(((0 - 4*num2*num2) - Math.pow(Math.pow(4*num2*num2,2) - 4*num1*num2,0.5).toFixed(1))/2*num1).toFixed(1)}` })
+
+                    default:
+                    console.log("Broken") }
+      break;
+      default:
+      console.log("broken");
+
+      }
+    }
+
+
+  conicSections = () => {
+    var num1 = Math.floor(Math.random()*2 + 2);
+    var num2 = Math.floor(Math.random()*4 + 2);
+    var num3 = Math.floor(Math.random()*3 + 2);
+    var num4 = Math.floor(Math.random()*5 + 2);
+    var num5 = Math.floor(Math.random()*3 + 2);
+    var num6 = Math.floor(Math.random()*4 + 2);
+
+    switch (this.state.difficulty){
+    case 0:
+    //circle
+    this.setState ({ equation: `${Math.pow(num1,2)}X^2 - ${2*num1*num2*num1}X + ${Math.pow((num2*num1),2)} + ${Math.pow(num3,2)}Y^2 - ${2*num3*num4*num3}Y + ${Math.pow((num4*num3),2)} = ${Math.pow(num5,2)}` })
+    this.setState({ step2Ans: `[(]${num1}X\\s*[-]\\s*${num2*num1}[)][^]2\\s*+\\s*[(]${num3}Y\\s*[-]\\s*${num4*num3}[)][^]2\\s*=\\s*${num5}`}) //Format it
+    this.setState({ step3Ans: ``}) //Find important points
+    this.setState({ step4Ans: `` })
+    break;
+
+    case 1:
+    //ellipse
+    this.setState ({ equation: `(${Math.pow(num1,2)}X^2 - ${2*num1*num2*num1}X + ${Math.pow((num2*num1),2)})/${Math.pow(num5,2)} + (${Math.pow(num3,2)}Y^2 - ${2*num3*num4*num3}Y + ${Math.pow((num4*num3),2)})/${Math.pow(num6,2)} = 1` })
+    this.setState({ step2Ans: `[(][(]${num1}X\\s*[-]\\s*${num2*num1}[)][^]2[)][/]${num5}\\s*[+]\\s*[(][(]${num3}Y\\s*[-]\\s*${num4*num3}[)][^]2[)][/]${num6}\\s*=\\s*1`}) //Format it
+    this.setState({ step3Ans: ``}) //Find important points
+    this.setState({ step4Ans: `` })
+    break;
+
+    case 2:
+    //hyperbola
+    this.setState ({ equation: `(${Math.pow(num1,2)}X^2 - ${2*num1*num2*num1}X + ${Math.pow((num2*num1),2)})/${Math.pow(num5,2)} - (${Math.pow(num3,2)}Y^2 - ${2*num3*num4*num3}Y + ${Math.pow((num4*num3),2)})/${Math.pow(num6,2)} = 1` })
+    this.setState({ step2Ans: `[(][(]${num1}X\\s*[-]\\s*${num2*num1}[)][^]2[)][/]${num5}\\s*[-]\\s*[(][(]${num3}Y\\s*[-]\\s*${num4*num3}[)][^]2[)][/]${num6}\\s*=\\s*1`}) //Format it
+    this.setState({ step3Ans: ``}) //Find important points
+    this.setState({ step4Ans: `` })
+    break;
+    default:
+    console.log("error"); }
+  }
 
 displayHint = event =>{
 event.preventDefault();
@@ -300,6 +333,11 @@ toQuadratic = event =>{
   this.setState({ category: "quadratic" },this.makeEquation);
 }
 
+toConic = event =>{
+  event.preventDefault();
+  this.setState({ category: "conic" },this.makeEquation);
+}
+
   // deleteBook = id => {
   //   API.deleteBook(id)
   //     .then(res => this.loadBooks())
@@ -317,10 +355,8 @@ toQuadratic = event =>{
   handleFormSubmit = event => {
     event.preventDefault();
     if((this.state.step2).match(new RegExp(this.state.step2Ans, 'i')) && (this.state.step3).match(new RegExp(this.state.step3Ans, 'i'))&& (this.state.step4).match(new RegExp(this.state.step4Ans, 'i'))) {
-
       alert("Correct!");
-      this.makeEquation();
-   
+      this.makeEquation();   
     }
     else{
       console.log("Incorrect.");
@@ -386,6 +422,9 @@ toQuadratic = event =>{
             </Button>
             <Button onClick={this.toQuadratic}>
             Quadratics
+            </Button>
+            <Button onClick={this.toConic}>
+            Conic Sections
             </Button>
             </Row>
           </Col>
@@ -467,7 +506,7 @@ toQuadratic = event =>{
           </div>
         </div> */}
       </Container>
-    );
+    )
   }
 }
 
